@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Booking Registration Form</title>
+<style>
+    /* Add your CSS styles here */
+</style>
+</head>
+<body>
+
+<h2>Hotel Booking Registration Form</h2>
+<form id="bookingForm" onsubmit="return calculateCost()">
+    <h3>Customer Info:</h3>
+    <label for="name">Name:</label>
+    <input type="text" id="name" required><br><br>
+    <label for="checkInDate">Check-in Date:</label>
+    <input type="date" id="checkInDate" required><br><br>
+    <label for="totalDays">Total Days:</label>
+    <input type="number" id="totalDays" min="1" required><br><br>
+    <label for="totalPersons">Total Persons:</label>
+    <input type="number" id="totalPersons" min="1" required><br><br>
+
+    <h3>Room Info:</h3>
+    <label for="roomType">Room Type:</label>
+    <select id="roomType">
+        <option value="delux">Delux</option>
+        <option value="suite">Suite</option>
+    </select><br><br>
+    <input type="checkbox" id="acCheckbox"> <label for="acCheckbox">AC</label>
+    <input type="checkbox" id="lockerCheckbox"> <label for="lockerCheckbox">Locker</label><br><br>
+
+    <h3>Payment and Balance:</h3>
+    <label for="advanceAmount">Advance Amount:</label>
+    <input type="number" id="advanceAmount" min="0" required><br><br>
+    <label for="totalCost">Total Cost:</label>
+    <input type="number" id="totalCost" disabled><br><br>
+    <label for="balance">Balance:</label>
+    <input type="number" id="balance" disabled><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+    function calculateCost() {
+        var totalDays = parseInt(document.getElementById("totalDays").value);
+        var totalPersons = parseInt(document.getElementById("totalPersons").value);
+        var advanceAmount = parseInt(document.getElementById("advanceAmount").value);
+        var roomType = document.getElementById("roomType").value;
+        var acCheckbox = document.getElementById("acCheckbox").checked;
+        var lockerCheckbox = document.getElementById("lockerCheckbox").checked;
+
+        var deluxRoomRate = 2000; // Example rate for Delux Room per day
+        var suiteRoomRate = 3000; // Example rate for Suite Room per day
+        var acRate = 500; // Example rate for AC per day
+        var lockerRate = 200; // Example rate for Locker per day
+        var extraPersonCharge = 1000; // Example charge per extra person per day
+
+        var roomCost = 0;
+        var amenitiesCost = 0;
+
+        if (roomType === "delux") {
+            roomCost = deluxRoomRate * totalDays;
+        } else if (roomType === "suite") {
+            roomCost = suiteRoomRate * totalDays;
+        }
+
+        if (acCheckbox) {
+            amenitiesCost += acRate * totalDays;
+        }
+        if (lockerCheckbox) {
+            amenitiesCost += lockerRate * totalDays;
+        }
+
+        var totalRoomCost = roomCost * totalPersons;
+        var totalAmenitiesCost = amenitiesCost * totalPersons;
+
+        var totalCost = totalRoomCost + totalAmenitiesCost + (extraPersonCharge * totalDays * (totalPersons - 1));
+        var balance = totalCost - advanceAmount;
+
+        document.getElementById("totalCost").value = totalCost;
+        document.getElementById("balance").value = balance;
+
+        return false; // Prevent form submission
+    }
+</script>
+
+</body>
+</html>
